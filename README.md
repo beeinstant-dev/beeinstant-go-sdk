@@ -9,7 +9,7 @@ InitMetricLogger("MyServiceName",
         "PublicKey",
         "PrivateKey",
         "Endpoint",
-        10)
+        10) // flush once every 10 seconds
 ```
 
 **Counter**
@@ -17,9 +17,20 @@ InitMetricLogger("MyServiceName",
 GetMetricLogger().incCounter("MyCounter", 1)
 ```
 
-**Timer and Metrics with Units**
+**Timer**
 ```go
-GetMetricLogger().record("MyTimer", 100, MILLI_SECOND)
+startTime := time.Now().UnixNano()
+//
+// processing works here
+//
+GetMetricLogger().record("MyProcessingTime",
+    float64((time.Now().UnixNano()-startTime)/1000000),
+    MILLI_SECOND)
+```
+
+**Arbitrary Metrics with Units**
+```go
+GetMetricLogger().record("MyPayload", 100, BYTE)
 ```
 
 **Dimensions**

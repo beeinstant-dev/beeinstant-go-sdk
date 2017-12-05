@@ -1,4 +1,4 @@
-package metriclogger
+package beeinstant_go_sdk
 
 import (
     "testing"

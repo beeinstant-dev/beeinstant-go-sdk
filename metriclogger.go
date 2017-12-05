@@ -1,7 +1,6 @@
-package metriclogger
+package beeinstant_go_sdk
 
 import (
-    "../sender"
     "sync"
     "strings"
     "time"
@@ -36,7 +35,7 @@ type MetricLoggerNoOp struct{}
 
 type MetricLoggerReal struct {
     rootDimensions string
-    sender         *sender.Sender
+    sender         *Sender
     flushInterval  int64
     metricChannel  chan MetricMessage
     metrics        map[string]map[string][]float64
@@ -65,7 +64,7 @@ func InitMetricLogger(service, env, publicKey, secretKey, endpoint string, flush
 
         metricLoggerReal := &MetricLoggerReal{
             rootDimensions: rootDimensions,
-            sender:         sender.NewSender(publicKey, secretKey, endpoint),
+            sender:         NewSender(publicKey, secretKey, endpoint),
             flushInterval:  int64(flushInterval) * 1000,
             metricChannel:  make(chan MetricMessage, 100),
             metrics:        make(map[string]map[string][]float64),
