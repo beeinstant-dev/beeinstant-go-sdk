@@ -14,9 +14,9 @@ import (
 )
 
 func TestMetricLoggerNoOp(t *testing.T) {
-    metrics := GetMetricLogger().extendDimensions("location=Dublin")
-    metrics.record("ProcessingTime", 1, MILLI_SECOND)
-    metrics.incCounter("MyCounter", 1)
+    metrics := GetMetricLogger().ExtendDimensions("location=Dublin")
+    metrics.Record("ProcessingTime", 1, MILLI_SECOND)
+    metrics.IncCounter("MyCounter", 1)
 }
 
 func TestMetricLoggerReal(t *testing.T) {
@@ -83,14 +83,14 @@ func TestMetricLoggerReal(t *testing.T) {
         2)
 
     for i := 0; i < 10; i++ {
-        GetMetricLogger().incCounter("MyCounterRoot", 1)
-        GetMetricLogger().record("MyTimerRoot", 100, MILLI_SECOND)
+        GetMetricLogger().IncCounter("MyCounterRoot", 1)
+        GetMetricLogger().Record("MyTimerRoot", 100, MILLI_SECOND)
         GetMetricLogger().
-            extendDimensions("api=PublishMetrics,location=Dublin").
-            incCounter("MyCounter", 2)
+            ExtendDimensions("api=PublishMetrics,location=Dublin").
+            IncCounter("MyCounter", 2)
         GetMetricLogger().
-            extendDimensions("api=PublishMetrics,location=Dublin").
-            record("MyTimer", 200, MILLI_SECOND)
+            ExtendDimensions("api=PublishMetrics,location=Dublin").
+            Record("MyTimer", 200, MILLI_SECOND)
         time.Sleep(500 * time.Millisecond)
     }
 

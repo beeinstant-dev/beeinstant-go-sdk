@@ -8,13 +8,13 @@ import (
 )
 
 type MetricCollector interface {
-    incCounter(metricName string, value int)
-    record(metricName string, value float64, unit string)
+    IncCounter(metricName string, value int)
+    Record(metricName string, value float64, unit string)
 }
 
 type MetricLogger interface {
     MetricCollector
-    extendDimensions(dimensions string) MetricCollector
+    ExtendDimensions(dimensions string) MetricCollector
 }
 
 type MetricMessage struct {
@@ -124,11 +124,11 @@ func (metricLogger *MetricLoggerReal) updateMetricMap(message *MetricMessage) {
     }
 }
 
-func (metricLogger *MetricLoggerReal) extendDimensions(dimensions string) MetricCollector {
+func (metricLogger *MetricLoggerReal) ExtendDimensions(dimensions string) MetricCollector {
     return &MetricsReal{dimensions: dimensions + ",", metricLogger: metricLogger}
 }
 
-func (metricLogger *MetricLoggerReal) incCounter(metricName string, value int) {
+func (metricLogger *MetricLoggerReal) IncCounter(metricName string, value int) {
     if value >= 0 {
         metricLogger.metricChannel <- MetricMessage{
             dimensions: metricLogger.rootDimensions,
@@ -139,7 +139,7 @@ func (metricLogger *MetricLoggerReal) incCounter(metricName string, value int) {
     }
 }
 
-func (metricLogger *MetricLoggerReal) record(metricName string, value float64, unit string) {
+func (metricLogger *MetricLoggerReal) Record(metricName string, value float64, unit string) {
     if value >= 0 {
         metricLogger.metricChannel <- MetricMessage{
             dimensions: metricLogger.rootDimensions,
@@ -151,7 +151,7 @@ func (metricLogger *MetricLoggerReal) record(metricName string, value float64, u
 }
 
 // Metrics real
-func (metrics *MetricsReal) incCounter(metricName string, value int) {
+func (metrics *MetricsReal) IncCounter(metricName string, value int) {
     if value >= 0 {
         metrics.metricLogger.metricChannel <- MetricMessage{
             dimensions: metrics.metricLogger.rootDimensions + metrics.dimensions,
@@ -162,7 +162,7 @@ func (metrics *MetricsReal) incCounter(metricName string, value int) {
     }
 }
 
-func (metrics *MetricsReal) record(metricName string, value float64, unit string) {
+func (metrics *MetricsReal) Record(metricName string, value float64, unit string) {
     if value >= 0 {
         metrics.metricLogger.metricChannel <- MetricMessage{
             dimensions: metrics.metricLogger.rootDimensions + metrics.dimensions,
@@ -174,15 +174,15 @@ func (metrics *MetricsReal) record(metricName string, value float64, unit string
 }
 
 // MetricLogger no-op
-func (metricLogger *MetricLoggerNoOp) extendDimensions(dimensions string) MetricCollector {
+func (metricLogger *MetricLoggerNoOp) ExtendDimensions(dimensions string) MetricCollector {
     return new(MetricsNoOp)
 }
-func (metricLogger *MetricLoggerNoOp) incCounter(metricName string, value int) {}
-func (metricLogger *MetricLoggerNoOp) record(metricName string, value float64, unit string) {}
+func (metricLogger *MetricLoggerNoOp) IncCounter(metricName string, value int) {}
+func (metricLogger *MetricLoggerNoOp) Record(metricName string, value float64, unit string) {}
 
 // Metrics no-op
-func (metrics *MetricsNoOp) incCounter(metricName string, value int) {}
-func (metrics *MetricsNoOp) record(metricName string, value float64, unit string) {}
+func (metrics *MetricsNoOp) IncCounter(metricName string, value int) {}
+func (metrics *MetricsNoOp) Record(metricName string, value float64, unit string) {}
 
 // Units
 const NANO_SECOND = "ns"

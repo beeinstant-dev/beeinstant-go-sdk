@@ -7,9 +7,17 @@ go get -v github.com/beeinstant-dev/beeinstant-go-sdk
 ```
 
 ## Sample Usage
+
+**Import**
+```go
+import (
+    beeinstant "github.com/beeinstant-dev/beeinstant-go-sdk"
+)
+```
+
 **Initialize MetricLogger**
 ```go
-InitMetricLogger("MyServiceName",
+beeinstant.InitMetricLogger("MyServiceName",
         "MyEnvironment",
         "PublicKey",
         "PrivateKey",
@@ -19,7 +27,7 @@ InitMetricLogger("MyServiceName",
 
 **Counter**
 ```go
-GetMetricLogger().incCounter("MyCounter", 1)
+beeinstant.GetMetricLogger().IncCounter("MyCounter", 1)
 ```
 
 **Timer**
@@ -28,30 +36,30 @@ startTime := time.Now().UnixNano()
 //
 // processing works here
 //
-GetMetricLogger().record("MyProcessingTime",
+beeinstant.GetMetricLogger().Record("MyProcessingTime",
     float64((time.Now().UnixNano()-startTime)/1000000),
     MILLI_SECOND)
 ```
 
 **Arbitrary Metrics with Units**
 ```go
-GetMetricLogger().record("MyPayload", 100, BYTE)
+beeinstant.GetMetricLogger().Record("MyPayload", 100, BYTE)
 ```
 
 **Dimensions**
 
 Add dimensions to bring more context to metrics.
 ```go
-GetMetricLogger().
-    extendDimensions("api=PublishMetrics,location=Dublin").
-    incCounter("MyCounter", 1)
+beeinstant.GetMetricLogger().
+    ExtendDimensions("api=PublishMetrics,location=Dublin").
+    IncCounter("MyCounter", 1)
 ```
 
 Multiple metrics per group of dimensions
 ```go
-metrics := GetMetricLogger().
-    extendDimensions("api=PublishMetrics,location=Dublin")
+metrics := beeinstant.GetMetricLogger().
+    ExtendDimensions("api=PublishMetrics,location=Dublin")
     
-metrics.incCounter("MyCounter", 1)
-metrics.record("MyTimer", 100, MILLI_SECOND)
+metrics.IncCounter("MyCounter", 1)
+metrics.Record("MyTimer", 100, MILLI_SECOND)
 ```
