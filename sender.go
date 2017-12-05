@@ -150,20 +150,23 @@ func serializeMetricMap(metrics map[string]map[string][]float64) (*bytes.Buffer,
 func (s *Sender) packAndPost(processingMap map[string]map[string][]float64) {
     normalizeMetricMap(&processingMap)
     serializedMapBuf, numOfMetrics := serializeMetricMap(processingMap)
-    signature := sign(serializedMapBuf, s.secretKey)
-    resp, err := s.client.Post(s.endpoint+
-        "/PutMetric?signature="+ url.QueryEscape(signature)+
-        "&publicKey="+ url.QueryEscape(s.publicKey)+
-        "&timestamp="+ fmt.Sprint(time.Now().Unix()),
-        "text/plain", serializedMapBuf)
-    if err != nil {
-        log.Println("err", err)
-    } else {
-        log.Println(fmt.Sprintf("Sent %d metrics to BeeInstant @ %s, publicKey %s", numOfMetrics, s.endpoint, s.publicKey))
-        io.Copy(ioutil.Discard, resp.Body)
-        resp.Body.Close()
+    defer serializedMapBuf.Reset()
+
+    if numOfMetrics > 0 && len(serializedMapBuf.Bytes()) > 0 {
+        signature := sign(serializedMapBuf, s.secretKey)
+        resp, err := s.client.Post(s.endpoint+
+            "/PutMetric?signature="+ url.QueryEscape(signature)+
+            "&publicKey="+ url.QueryEscape(s.publicKey)+
+            "&timestamp="+ fmt.Sprint(time.Now().Unix()),
+            "text/plain", serializedMapBuf)
+        if err != nil {
+            log.Println("err", err)
+        } else {
+            log.Println(fmt.Sprintf("Sent %d metrics to BeeInstant @ %s, publicKey %s", numOfMetrics, s.endpoint, s.publicKey))
+            io.Copy(ioutil.Discard, resp.Body)
+            resp.Body.Close()
+        }
     }
-    serializedMapBuf.Reset()
 }
 
 func (s *Sender) Send(metrics *map[string]map[string][]float64, nonBlocking bool) {
