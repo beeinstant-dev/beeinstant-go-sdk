@@ -1,6 +1,11 @@
 # BeeInstant Go SDK
 BeeInstant Go SDK allows engineers to capture software performance metrics and business metrics directly from Go code.
 
+## Installation
+```
+go get -v github.com/beeinstant-dev/beeinstant-go-sdk
+```
+
 ## Sample Usage
 **Initialize MetricLogger**
 ```go
