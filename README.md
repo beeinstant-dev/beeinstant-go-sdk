@@ -6,6 +6,8 @@ BeeInstant Go SDK empowers engineers to capture software **performance metrics**
 go get -v github.com/beeinstant-dev/beeinstant-go-sdk
 ```
 
+**Signup Free** to get credentials to publish advanced custom metrics: [https://beeinstant.com/](https://beeinstant.com/)
+
 ## Sample Usage
 
 **Import**
@@ -20,7 +22,7 @@ import (
 beeinstant.InitMetricLogger("MyServiceName",
         "MyEnvironment",
         "PublicKey",
-        "PrivateKey",
+        "SecretKey",
         "Endpoint",
         10) // flush once every 10 seconds
 ```
@@ -109,4 +111,4 @@ func main() {
 }
 ```
 
-Go to https://app.beeinstant.com to explore your metrics, build dashboards and set alarms.
+Go to [https://app.beeinstant.com](https://app.beeinstant.com) to explore your metrics, build dashboards and set alarms.
