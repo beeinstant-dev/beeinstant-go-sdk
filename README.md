@@ -1,5 +1,5 @@
 # BeeInstant Go SDK
-BeeInstant Go SDK allows engineers to capture software performance metrics and business metrics directly from Go code.
+BeeInstant Go SDK allows engineers to capture software **performance metrics** and **business metrics** directly from Go code. BeeInstant provides **multi-dimensional metrics** which can be aggregated with **full-spectrum of statistics** not only at host level, but also **at service level**. For example, engineers can put SLA on percentile 99th of Latency metric at service level across thousands of hosts/servers/containers. 
 
 ## Installation
 ```
